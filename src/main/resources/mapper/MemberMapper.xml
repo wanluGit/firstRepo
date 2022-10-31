@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.MemberMapper">
+
+    <select id="getPage" resultType="com.example.demo.pojo.Member">
+        select id, name, sex, salary, department, age
+        from member
+        <where>
+            <if test="query.id != null and query.id >0">
+                id=#{query.id}
+            </if>
+            <if test="query.name != null and query.name.length() >0">
+                and name like concat('%',concat(#{query.name},'%'))
+            </if>
+            <if test="query.sex != null and query.sex.length() >0">
+                and sex=#{query.sex}
+            </if>
+            <if test="query.department != null and query.department.length() >0">
+                and department=#{query.department}
+            </if>
+            <if test="query.salaryBegin != null
+                and query.salaryBegin>=0
+                and query.salaryEnd != null
+                and query.salaryEnd >=query.salaryBegin">
+                and (salary between #{query.salaryBegin} and #{query.salaryEnd})
+            </if>
+            <if test="query.ageBegin != null
+                and query.ageBegin>=0
+                and query.ageEnd != null
+                and query.ageEnd >=query.ageBegin">
+                and (age between #{query.ageBegin} and #{query.ageEnd})
+            </if>
+        </where>
+    </select>
+
+</mapper>
